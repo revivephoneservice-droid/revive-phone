@@ -1,0 +1,77 @@
+import { Smartphone } from "lucide-react"
+
+const FOOTER_COLUMNS = [
+  {
+    title: "Компанія",
+    links: ["Про нас", "Блог", "Контакти", "Кар'єра"],
+  },
+  {
+    title: "Послуги",
+    links: ["Аксесуари", "Підбір телефона", "Trade-In", "Чохли на замовлення"],
+  },
+  {
+    title: "Підтримка",
+    links: ["Оплата і доставка", "Гарантія", "Повернення", "Часті питання"],
+  },
+]
+
+export function SiteFooter() {
+  return (
+    <footer id="footer" className="border-t border-border bg-background">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-2">
+            <a href="#" className="flex items-center gap-2.5">
+              <span className="flex size-9 items-center justify-center rounded-full bg-foreground text-background">
+                <Smartphone className="size-5" />
+              </span>
+              <span className="text-lg font-bold tracking-tight text-foreground">Upgrade Mobile</span>
+            </a>
+            <p className="mt-4 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
+              Дбаємо про вашого старого друга. А якщо це неможливо — підбираємо нового та кращого.
+            </p>
+            <a
+              href="tel:8005550123"
+              className="mt-5 inline-block text-lg font-semibold tracking-tight text-foreground"
+            >
+              (800) 555-0123
+            </a>
+          </div>
+
+          {FOOTER_COLUMNS.map((col) => (
+            <div key={col.title}>
+              <h3 className="text-sm font-semibold text-foreground">{col.title}</h3>
+              <ul className="mt-4 flex flex-col gap-3">
+                {col.links.map((link) => (
+                  <li key={link}>
+                    <a
+                      href="#"
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Upgrade Mobile. Всі права захищені.
+          </p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Політика конфіденційності
+            </a>
+            <a href="#" className="text-xs text-muted-foreground transition-colors hover:text-foreground">
+              Умови використання
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
