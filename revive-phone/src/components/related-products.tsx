@@ -1,6 +1,9 @@
+"use client"
 import Image from "next/image"
 import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase"
 
 const RELATED = [
   { name: "Захисне 9D скло для iPhone 15 Pro", badge: "Новий", price: "499 ₴", image: "/images/glass.png" },
@@ -10,6 +13,23 @@ const RELATED = [
 ]
 
 export function RelatedProducts() {
+    const [products, setProducts] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+    const supabase = createClient()
+
+    useEffect(() => {
+        async function fetchProducts() {
+          setLoading(true)
+          const { data, error } = await supabase.from('products').select('*').eq('is_active', true)
+          console.log("Fetched products:", data)
+          if (data) setProducts(data)
+          if (error) console.error("Ошибка загрузки товаров:", error)
+          setLoading(false)
+        }
+        fetchProducts()
+      }, [supabase])
+
+      const shortProducts = products.length > 4 ? products.slice(0, 4) : products; 
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <h2 className="text-2xl font-bold uppercase tracking-tight text-balance sm:text-3xl">
@@ -17,11 +37,11 @@ export function RelatedProducts() {
       </h2>
 
       <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {RELATED.map((product) => (
+        {shortProducts.map((product) => (
           <article key={product.name} className="group overflow-hidden rounded-3xl bg-card">
             <div className="relative aspect-square overflow-hidden bg-muted/30">
               <Image
-                src={product.image || "/placeholder.svg"}
+                src={product.image_url || "/placeholder.svg"}
                 alt={product.name}
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"

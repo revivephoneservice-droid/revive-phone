@@ -1,20 +1,45 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { Heart, Menu, Search, ShoppingBag, Smartphone, User, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 const NAV_LINKS = [
   { label: "КАТАЛОГ", href: "/catalog" },
-  { label: "ПІДБІР ТЕЛЕФОНА", href: "#phones" },
-  { label: "ОБМІН (TRADE-IN)", href: "#tool" },
-  { label: "ЧОХЛИ", href: "#accessories" },
+  { label: "ПІДБІР ТЕЛЕФОНА", href: "/#phones" },
+  { label: "ОБМІН (TRADE-IN)", href: "/#tool" },
+  { label: "ЧОХЛИ", href: "/#accessories" },
   { label: "КОНТАКТИ", href: "#footer" },
 ]
 
 export function SiteHeader() {
-  const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false)
+    const router = useRouter()
+    const pathname = usePathname()
+
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
+  e.preventDefault()
+    setOpen(false) // Закрываем мобильное меню
+    console.log("Клик по ссылке:", href);
+
+    // Если это якорная ссылка типа /#phones или #tool
+    if (href.startsWith('#') || href.includes('/#')) {
+      // Если мы уже на главной, просто скроллим
+      if (pathname === '/') {
+        const id = href.split('#')[1]
+        const element = document.getElementById(id)
+        element?.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        // Если мы на другой странице, переходим на главную с хешем
+        router.push(href)
+      }
+    } else {
+      // Для обычных ссылок (например, /catalog)
+      router.push(href)
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -37,14 +62,15 @@ export function SiteHeader() {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-7 lg:flex">
-            {NAV_LINKS.map((link) => (
-              <Link
+          {NAV_LINKS.map((link) => (
+            <a
                 key={link.label}
                 href={link.href}
-                className="text-xs font-medium tracking-wide text-muted-foreground transition-colors hover:text-foreground"
-              >
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="cursor-pointer text-xs font-medium tracking-wide text-muted-foreground transition-colors hover:text-foreground"
+            >
                 {link.label}
-              </Link>
+            </a>
             ))}
           </nav>
 

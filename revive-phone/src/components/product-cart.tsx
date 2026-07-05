@@ -4,17 +4,19 @@ import { useState } from "react"
 import Image from "next/image"
 import { Heart, ShoppingBag, Check } from "lucide-react"
 import type { Accessory } from "@/lib/accessories"
+import Link from "next/link"
 
 export function ProductCard({ product }: { product: Accessory }) {
   const [liked, setLiked] = useState(false)
   const [added, setAdded] = useState(false)
 
   return (
+    <Link href={`/product/${product.id}`} className="group">
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-foreground/30">
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-muted/40">
         <span className="absolute left-3 top-3 z-10 rounded-full bg-background/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-foreground backdrop-blur">
-          {product.category}
+          {product.brand}
         </span>
         <button
           aria-label={liked ? "Прибрати з обраного" : "Додати в обране"}
@@ -28,7 +30,7 @@ export function ProductCard({ product }: { product: Accessory }) {
         </button>
         <Image
           src={product.image_url || "/placeholder.svg"}
-          alt={product.title}
+          alt="images"
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -38,10 +40,10 @@ export function ProductCard({ product }: { product: Accessory }) {
       {/* Body */}
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-bold leading-snug text-foreground text-balance">
-          {product.title}
+          {product.name}
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">
-          {product.compatibility}
+          {product.description}
         </p>
 
         <div className="mt-4 flex items-center justify-between gap-2">
@@ -70,5 +72,6 @@ export function ProductCard({ product }: { product: Accessory }) {
         </div>
       </div>
     </article>
+    </Link>
   )
 }

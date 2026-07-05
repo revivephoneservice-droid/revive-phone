@@ -13,6 +13,9 @@ import { ProductCard } from "./product-cart"
 import { FilterSidebar, type Filters } from "@/components/filter-sidebar"
 import { PRICE_MAX, PRICE_MIN } from "@/lib/accessories"
 import { createClient } from "@/lib/supabase"
+import { CATEGORY_MAP } from "@/lib/accessories"
+import { SearchComponent } from "./SearchComponent"
+
 
 const SORT_OPTIONS = [
   { value: "popular", label: "За популярністю" },
@@ -32,6 +35,7 @@ export function CatalogClient() {
   const [sort, setSort] = useState("popular")
   const [page, setPage] = useState(1)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
   
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,13 +53,32 @@ export function CatalogClient() {
     fetchProducts()
   }, [supabase])
 
+  console.log("Current products:", products)
+
   const filtered = useMemo(() => {
-    return products.filter((p) => {
-      // 1. Фильтр категорий (теперь используем category_id из БД)
+    let result = [...products].filter((p) => {
+      // 1. Поиск по названию
+      const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // 2. Категории
+      const selectedCategoryIds = filters.categories.map(key => CATEGORY_MAP[key]);
+      const matchesCategory = filters.categories.length === 0 || selectedCategoryIds.includes(p.category_id);
+      
+      // 3. Бренды
+      const matchesBrand = filters.brands.length === 0 || filters.brands.includes(p.brand);
+      
+      // 4. Цена
+      const matchesPrice = p.price >= filters.price[0] && p.price <= filters.price[1];
   
-      return true;
+      return matchesSearch && matchesCategory && matchesBrand && matchesPrice;
     });
-  }, [filters, sort, products]);
+  
+    // Сортировка
+    if (sort === "price-asc") result.sort((a, b) => a.price - b.price);
+    if (sort === "price-desc") result.sort((a, b) => b.price - a.price);
+    
+    return result;
+  }, [filters, sort, products, searchQuery]); // Добавили searchQuery в зависимости
 
   const handleChange = (next: Filters) => {
     setFilters(next)
@@ -69,11 +92,15 @@ export function CatalogClient() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
+
       <div className="flex flex-col gap-6 border-b border-border pb-8 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground text-balance sm:text-4xl lg:text-5xl">
             Аксесуари для ваших девайсів
+
+            {searchQuery && <p>Результати пошуку: "{searchQuery}"</p>}
           </h1>
+          
           <p className="mt-3 text-sm text-muted-foreground">
             Знайдено <span className="font-semibold text-foreground">{filtered.length} товарів</span>
           </p>
@@ -99,7 +126,11 @@ export function CatalogClient() {
           </Select>
         </div>
       </div>
-
+      <SearchComponent 
+       products={products} 
+       value={searchQuery} 
+       onChange={setSearchQuery} // Вот этот вызов передает текст вверх в состояние CatalogClient
+    />
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
         <aside className={`${mobileFiltersOpen ? "block" : "hidden"} lg:block`}>
           <div className="lg:sticky lg:top-44">
