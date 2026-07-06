@@ -48,7 +48,7 @@ export function RelatedProducts() {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <span className="absolute left-4 top-4 rounded-full bg-foreground px-3 py-1 text-xs font-semibold text-background">
-                {product.badge}
+                {product.brand}
               </span>
               <button
                 type="button"
@@ -61,7 +61,7 @@ export function RelatedProducts() {
             <div className="p-5">
               <h3 className="min-h-10 text-sm font-semibold leading-snug text-pretty">{product.name}</h3>
               <div className="mt-4 flex items-center justify-between">
-                <span className="text-xl font-bold">{product.price}</span>
+                <span className="text-xl font-bold">{product.price}₴</span>
                 <Button variant="secondary" size="sm" className="rounded-full px-4">
                   Переглянути
                 </Button>

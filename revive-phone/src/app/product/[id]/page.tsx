@@ -1,15 +1,12 @@
 import { createClient } from "@/lib/supabase";
-import { ProductDetail } from "@/components/product-details";
 import { RelatedProducts } from "@/components/related-products";
+import { ProductDetailWrapper } from "@/components/product-detail-wrapper";
 
-// Обновляем тип: params теперь Promise
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
-  // Добавляем await перед доступом к id
   const { id } = await params;
   
   const supabase = createClient();
   
-  // Запрос товара с использованием полученного ID
   const { data: product, error } = await supabase
     .from('products')
     .select('*')
@@ -22,7 +19,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
   return (
     <main className="dark min-h-screen bg-background text-foreground">
-      <ProductDetail product={product} />
+      {/* Теперь мы рендерим обертку, а она сама внутри себя использует "use client" */}
+      <ProductDetailWrapper product={product} />
       <RelatedProducts />
     </main>
   );

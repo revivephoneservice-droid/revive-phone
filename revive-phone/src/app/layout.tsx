@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import {SiteHeader} from "@/components/header";
 import {SiteFooter} from "@/components/footer";
+import { CartProvider } from '@/context/cart-context';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({
@@ -43,10 +44,12 @@ export default function RootLayout({
   return (
     <html lang="uk" className={`dark ${geistSans.variable} ${geistMono.variable}`}>
       <body className="bg-background font-sans antialiased">
-        <SiteHeader />
-        {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-        <SiteFooter />
+        <CartProvider>
+          <SiteHeader />
+          {children}
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+          <SiteFooter />
+        </CartProvider>
       </body>
     </html>
   )

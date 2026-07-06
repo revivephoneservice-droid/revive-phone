@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation"
 import { Heart, Menu, Search, ShoppingBag, Smartphone, User, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useCart } from "@/context/cart-context"
 
 const NAV_LINKS = [
   { label: "КАТАЛОГ", href: "/catalog" },
@@ -18,6 +19,9 @@ export function SiteHeader() {
     const [open, setOpen] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
+    const { items } = useCart()
+    // Считаем общее количество товаров (суммируем qty)
+    const totalItems = items.reduce((sum, item) => sum + item.qty, 0)
 
   const handleNavClick = (e: React.MouseEvent, href: string) => {
   e.preventDefault()
@@ -95,12 +99,18 @@ export function SiteHeader() {
               <User className="size-5" />
             </button>
             <Link 
-            href={"/checkout"}
-              aria-label="Кошик"
-              className="relative flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                href={"/checkout"}
+                aria-label="Кошик"
+                className="relative flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
-              <ShoppingBag className="size-5" />
-              <span className="absolute right-1 top-1 size-1.5 rounded-full bg-foreground" />
+                <ShoppingBag className="size-5" />
+                
+                {/* Счетчик в левом нижнем углу */}
+                {totalItems > 0 && (
+                    <span className="absolute -bottom-0.5 -left-0.5 flex size-3.5 items-center justify-center rounded-full bg-foreground text-[8px] font-bold text-background ring-2 ring-background">
+                        {totalItems > 9 ? "9+" : totalItems}
+                    </span>
+                )}
             </Link>
             <button
               aria-label="Меню"
