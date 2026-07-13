@@ -28,10 +28,10 @@ export function ProductCard({ product }: { product: Accessory }) {
             className={`size-4 transition-colors ${liked ? "fill-foreground" : ""}`}
           />
         </button>
-        <Image
+        <img
           src={product.image_url || "/placeholder.svg"}
           alt="images"
-          fill
+         
           sizes="(max-width: 768px) 50vw, 25vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />

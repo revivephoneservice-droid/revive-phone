@@ -32,7 +32,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
         {/* Image Section */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-muted/20">
-          <Image src={imageUrl} alt={product.name} fill className="object-cover hover:scale-105 transition-transform duration-700" />
+          <img src={imageUrl} alt={product.name}  className="object-cover hover:scale-105 transition-transform duration-700" />
         </div>
 
         {/* Product Info Section */}

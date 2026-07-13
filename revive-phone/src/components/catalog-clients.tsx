@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/select"
 import { ProductCard } from "./product-cart"
 import { FilterSidebar, type Filters } from "@/components/filter-sidebar"
-import { PRICE_MAX, PRICE_MIN } from "@/lib/accessories"
+import { CategoryKey, PRICE_MAX, PRICE_MIN } from "@/lib/accessories"
 import { createClient } from "@/lib/supabase"
 import { CATEGORY_MAP } from "@/lib/accessories"
 import { SearchComponent } from "./SearchComponent"
+import { useSearchParams } from "next/navigation"
 
 
 const SORT_OPTIONS = [
@@ -36,10 +37,13 @@ export function CatalogClient() {
   const [page, setPage] = useState(1)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams()
   
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
+
+
 
   useEffect(() => {
     async function fetchProducts() {
@@ -52,6 +56,19 @@ export function CatalogClient() {
     }
     fetchProducts()
   }, [supabase])
+
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setFilters({
+        ...EMPTY_FILTERS, // Полностью сбрасываем старые фильтры
+        categories: [categoryParam as CategoryKey] 
+      });
+    } else {
+      // Если параметра нет, сбрасываем в дефолт
+      setFilters(EMPTY_FILTERS);
+    }
+  }, [searchParams]); // Работает корректно
 
   console.log("Current products:", products)
 

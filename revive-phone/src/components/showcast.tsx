@@ -1,29 +1,34 @@
 import { BatteryCharging, Magnet, ShieldHalf, Smartphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 const ACCESSORIES = [
   {
     icon: Smartphone,
     title: "Чохли оверсайз",
     description: "Об'ємний захист преміум-класу з ідеальним хватом та стилем.",
+    slug: "cases",
     price: "від $19",
   },
   {
     icon: ShieldHalf,
     title: "Захисне скло 9D",
     description: "Повне покриття екрана з олеофобним шаром проти відбитків.",
+    slug: "protective_glasses",
     price: "від $9",
   },
   {
     icon: BatteryCharging,
     title: "Бездротові зарядки",
     description: "Швидка магнітна зарядка для девайсів Apple та Samsung.",
+    slug: "chargers",
     price: "від $29",
   },
   {
     icon: Magnet,
     title: "Магнітні тримачі",
     description: "Надійне кріплення в авто та на столі одним рухом.",
+    slug: "holders",
     price: "від $15",
   },
 ]
@@ -59,9 +64,9 @@ export function AccessoriesShowcase() {
                 </p>
                 <div className="mt-6 flex items-center justify-between">
                   <span className="text-sm font-semibold text-foreground">{item.price}</span>
-                  <Button size="sm" variant="secondary" className="rounded-full border border-border font-semibold">
+                  <Link href={`/catalog?category=${item.slug}`}>
                     Купити
-                  </Button>
+                  </Link>
                 </div>
               </article>
             )
