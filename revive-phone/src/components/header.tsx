@@ -60,8 +60,9 @@ export function SiteHeader() {
           <Link href="/" className="flex items-center gap-2.5">
             <span className="flex size-9 items-center justify-center rounded-full bg-foreground text-background">
               <Smartphone className="size-5" />
+              
             </span>
-            <span className="text-lg font-bold tracking-tight text-foreground">Upgrade Mobile</span>
+            <span className="text-lg font-bold tracking-tight text-foreground">FixPhon</span>
           </Link>
 
           {/* Desktop nav */}
@@ -80,24 +81,6 @@ export function SiteHeader() {
 
           {/* Icons */}
           <div className="flex items-center gap-1">
-            <button
-              aria-label="Пошук"
-              className="flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-            >
-              <Search className="size-5" />
-            </button>
-            <button
-              aria-label="Обране"
-              className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground sm:flex"
-            >
-              <Heart className="size-5" />
-            </button>
-            <button
-              aria-label="Профіль"
-              className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground sm:flex"
-            >
-              <User className="size-5" />
-            </button>
             <Link 
                 href={"/checkout"}
                 aria-label="Кошик"

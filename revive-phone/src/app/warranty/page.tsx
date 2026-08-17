@@ -3,7 +3,7 @@ export default function WarrantyPage() {
       <div className="mx-auto max-w-4xl px-4 py-16">
         <h1 className="text-4xl font-bold tracking-tight">Гарантійні зобов'язання</h1>
         <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-          У Upgrade Mobile ми впевнені в якості наших послуг та комплектуючих. 
+          У FixPhon ми впевнені в якості наших послуг та комплектуючих. 
           Наша гарантійна політика розроблена для того, щоб ви почувалися захищеними 
           після кожного візиту до нашого сервісу.
         </p>

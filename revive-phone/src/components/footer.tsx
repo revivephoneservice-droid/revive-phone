@@ -31,13 +31,13 @@ export function SiteFooter() {
               <span className="flex size-9 items-center justify-center rounded-full bg-foreground text-background">
                 <Smartphone className="size-5" />
               </span>
-              <span className="text-lg font-bold tracking-tight text-foreground">Upgrade Mobile</span>
+              <span className="text-lg font-bold tracking-tight text-foreground">FixPhon</span>
             </a>
             <p className="mt-4 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
               Дбаємо про вашого старого друга. А якщо це неможливо — підбираємо нового та кращого.
             </p>
             <a href="tel:8005550123" className="mt-5 inline-block text-lg font-semibold tracking-tight text-foreground">
-              (800) 555-0123
+              (098) 054-11-65
             </a>
           </div>
 
@@ -62,7 +62,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Upgrade Mobile. Всі права захищені.
+            © {new Date().getFullYear()} FixPhon. Всі права захищені.
           </p>
           <div className="flex items-center gap-6">
             <a href="/privacy-policy" className="text-xs text-muted-foreground transition-colors hover:text-foreground">

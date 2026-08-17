@@ -105,7 +105,39 @@ export function ProductDetail({ product }: ProductDetailProps) {
             </div>
           </div>
         </div>
+
       </div>
+      {/* Преимущества магазина */}
+<section className="mt-24 border-t border-border pt-16">
+  <h2 className="text-3xl font-bold tracking-tight text-center mb-12">Чому обирають  FixPhon?</h2>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    {[
+      {
+        icon: ShieldCheck,
+        title: "Сертифікована якість",
+        desc: "Кожен пристрій проходить 15 етапів тестування перед продажем.",
+      },
+      {
+        icon: Zap,
+        title: "Швидка відправка",
+        desc: "Замовлення, оформлені до 16:00, їдуть до вас у той же день.",
+      },
+      {
+        icon: BadgeCheck,
+        title: "Підтримка 24/7",
+        desc: "Наші фахівці готові допомогти вам з налаштуванням будь-якого девайса.",
+      },
+    ].map((item, idx) => (
+      <div key={idx} className="flex flex-col items-center text-center p-8 rounded-3xl bg-secondary/20 border border-border/50">
+        <div className="size-14 flex items-center justify-center rounded-2xl bg-primary/10 text-primary mb-6">
+          <item.icon className="size-7" />
+        </div>
+        <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+        <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+      </div>
+    ))}
+  </div>
+</section>
 
       {/* Tabs и контент остались прежними, но теперь они гармонично продолжают этот стиль */}
     </div>

@@ -70,9 +70,9 @@ export default function PrivacyPolicy() {
   
         <footer className="pt-6 border-t border-gray-200 text-sm space-y-1">
           <h2 className="text-lg font-semibold mb-2">8. ЗВОРОТНИЙ ЗВ'ЯЗОК</h2>
-          <p><strong>[Вкажіть ПІБ ФОП / або Назву Бренду]</strong></p>
-          <p>Телефон: [Контактний номер телефону]</p>
-          <p>Email: [Контактний email]</p>
+          <p><strong>Кузнєцова Олена Михайлівна</strong></p>
+          <p>Телефон: +380980541165</p>
+          <p>Email: fixphon77@gmail.com</p>
         </footer>
       </article>
     )

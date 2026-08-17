@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PaymentButton } from "./payment-button"
 import Image from "next/image"
 import {
@@ -37,13 +37,65 @@ export function CheckoutClient() {
   const { items, updateQty, removeItem } = useCart()
   const [formData, setFormData] = useState({ firstName: "", lastName: "", phone: "", email: "" });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
-    };
+  };
   
   const [delivery, setDelivery] = useState("novaposhta")
   const [payment, setPayment] = useState("card")
-  const [promoInput, setPromoInput] = useState("")
+
+  // Состояния для Новой Почты
+  const [cityInput, setCityInput] = useState("")
+  const [cities, setCities] = useState<any[]>([])
+  const [selectedCity, setSelectedCity] = useState<{ Ref: string; Description: string } | null>(null)
+  
+  const [warehouses, setWarehouses] = useState<any[]>([])
+  const [selectedWarehouse, setSelectedWarehouse] = useState<{ Ref: string; Description: string } | null>(null)
+
+  // Поиск городов при вводе
+  useEffect(() => {
+    if (cityInput.length < 2) {
+      setCities([])
+      return
+    }
+    const timeout = setTimeout(async () => {
+      try {
+        const res = await fetch('/api/novaposhta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'getCities', cityName: cityInput })
+        })
+        const data = await res.json()
+        setCities(Array.isArray(data) ? data : [])
+      } catch (err) {
+        console.error(err)
+      }
+    }, 300)
+    return () => clearTimeout(timeout)
+  }, [cityInput])
+
+  // Загрузка отделений при выборе города
+  useEffect(() => {
+    if (!selectedCity) {
+      setWarehouses([])
+      setSelectedWarehouse(null)
+      return
+    }
+    async function loadWarehouses() {
+      try {
+        const res = await fetch('/api/novaposhta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'getWarehouses', cityRef: selectedCity?.Ref })
+        })
+        const data = await res.json()
+        setWarehouses(Array.isArray(data) ? data : [])
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    loadWarehouses()
+  }, [selectedCity])
   
   const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0)
   const total = subtotal
@@ -53,25 +105,25 @@ export function CheckoutClient() {
       
       {/* LEFT: Order form */}
       <div className="order-2 space-y-6 lg:order-1">
-      <FormSection step="1" title="Контактні дані">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <FormSection step="1" title="Контактні дані">
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Ім'я" htmlFor="firstName">
-            <Input id="firstName" placeholder="Олександр" value={formData.firstName} onChange={handleInputChange} />
+              <Input id="firstName" placeholder="Олександр" value={formData.firstName} onChange={handleInputChange} />
             </Field>
             <Field label="Прізвище" htmlFor="lastName">
-            <Input id="lastName" placeholder="Коваленко" value={formData.lastName} onChange={handleInputChange} />
+              <Input id="lastName" placeholder="Коваленко" value={formData.lastName} onChange={handleInputChange} />
             </Field>
             <Field label="Телефон" htmlFor="phone">
-            <Input id="phone" type="tel" placeholder="(050) 555-0123" value={formData.phone} onChange={handleInputChange} />
+              <Input id="phone" type="tel" placeholder="(050) 555-0123" value={formData.phone} onChange={handleInputChange} />
             </Field>
             <Field label="Email" htmlFor="email">
-            <Input id="email" type="email" placeholder="you@example.com" value={formData.email} onChange={handleInputChange} />
+              <Input id="email" type="email" placeholder="you@example.com" value={formData.email} onChange={handleInputChange} />
             </Field>
-        </div>
+          </div>
         </FormSection>
 
         <FormSection step="2" title="Доставка">
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-3 mb-6">
             {DELIVERY_OPTIONS.map((opt) => (
               <button key={opt.id} type="button" onClick={() => setDelivery(opt.id)} className={`flex flex-col items-start gap-2 rounded-2xl border p-4 text-left transition-all ${delivery === opt.id ? "border-foreground bg-foreground text-background" : "border-border bg-muted/40 text-foreground hover:border-foreground/40"}`}>
                 <opt.icon className="size-5" />
@@ -80,6 +132,66 @@ export function CheckoutClient() {
               </button>
             ))}
           </div>
+
+          {/* Поля Новой Почты (показываем только если выбрана НП) */}
+          {delivery === "novaposhta" && (
+            <div className="space-y-4 rounded-2xl border border-border bg-muted/20 p-4">
+              <h3 className="text-sm font-bold">Відділення Нової Пошти</h3>
+              
+              {/* Выбор города */}
+              <div className="relative">
+                <Field label="Місто" htmlFor="cityInput">
+                  <Input 
+                    id="cityInput" 
+                    placeholder="Почніть вводити місто (наприклад, Київ)" 
+                    value={selectedCity ? selectedCity.Description : cityInput} 
+                    onChange={(e) => {
+                      setCityInput(e.target.value)
+                      if (selectedCity) setSelectedCity(null)
+                    }} 
+                  />
+                </Field>
+                {cities.length > 0 && !selectedCity && (
+                  <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-xl border bg-card shadow-lg">
+                    {cities.map((city) => (
+                      <li 
+                        key={city.Ref} 
+                        onClick={() => {
+                          setSelectedCity(city)
+                          setCities([])
+                        }}
+                        className="cursor-pointer px-4 py-2 text-sm hover:bg-muted"
+                      >
+                        {city.Description} ({city.AreaDescription} обл.)
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Выбор отделения */}
+              {selectedCity && (
+                <Field label="Відділення" htmlFor="warehouseSelect">
+                  <select 
+                    id="warehouseSelect"
+                    className="h-12 w-full rounded-xl border border-input bg-muted/40 px-4 text-sm text-foreground outline-none focus:border-ring"
+                    onChange={(e) => {
+                      const wh = warehouses.find(w => w.Ref === e.target.value)
+                      setSelectedWarehouse(wh || null)
+                    }}
+                    defaultValue=""
+                  >
+                    <option value="" disabled>Оберіть відділення</option>
+                    {warehouses.map((wh) => (
+                      <option key={wh.Ref} value={wh.Ref}>
+                        {wh.Description}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              )}
+            </div>
+          )}
         </FormSection>
 
         <FormSection step="3" title="Оплата">
@@ -135,7 +247,21 @@ export function CheckoutClient() {
           </div>
 
           <div className="mt-6">
-             <PaymentButton orderData={{ items, delivery, payment, total, contactData: formData }} />
+             <PaymentButton 
+               orderData={{ 
+                 items, 
+                 delivery, 
+                 payment, 
+                 total, 
+                 contactData: formData,
+                 novaPoshta: {
+                   city: selectedCity?.Description || "",
+                   cityRef: selectedCity?.Ref || "",
+                   warehouse: selectedWarehouse?.Description || "",
+                   warehouseRef: selectedWarehouse?.Ref || ""
+                 }
+               }} 
+             />
           </div>
           
           <p className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-4" /> Безпечне оформлення</p>
