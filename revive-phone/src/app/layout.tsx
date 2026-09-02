@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Upgrade Mobile — Аксесуари, Trade-In та підбір телефонів',
+  title: 'FixPhon — Аксесуари, Trade-In та підбір телефонів',
   description:
     'Одягни свій девайс, обміняй старий на новий або підбери ідеальну модель. Преміальні чохли, захисне скло, Trade-In та новинки Apple і Samsung.',
   generator: 'v0.app',
