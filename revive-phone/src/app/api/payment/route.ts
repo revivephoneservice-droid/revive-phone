@@ -4,9 +4,9 @@ import crypto from 'crypto';
 export async function POST(request: Request) {
   const { amount, orderReference, productName, productPrice, productCount } = await request.json();
   
-  const merchantAccount = "test_merch_n1"; // Ваш мерчант
-  const merchantSecretKey = "flk3409refn54t54t*FNJRET"; // Секретный ключ
-  const merchantDomainName = "www.ваш-сайт.com";
+  const merchantAccount = "revive_phone_ten_vercel_app"; // Ваш мерчант
+  const merchantSecretKey = "26207fc6790c275a0e8e717cb3728dc57c82fbbf"; // Секретный ключ  ?? flk3409refn54t54t*FNJRET
+  const merchantDomainName = "revive-phone-ten.vercel.app";
   const orderDate = Math.floor(Date.now() / 1000);
   const currency = "UAH";
 

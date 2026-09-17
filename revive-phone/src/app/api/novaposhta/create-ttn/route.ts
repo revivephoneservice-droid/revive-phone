@@ -123,7 +123,7 @@ export async function POST(req: Request) {
         Sender: process.env.NP_SENDER_REF,
         SenderAddress: process.env.NP_SENDER_WAREHOUSE_REF,
         ContactSender: process.env.NP_CONTACT_SENDER_REF,
-        SendersPhone: '380635132869',
+        SendersPhone: process.env.NP_SENDER_PHONE,
 
         // Данные получателя
         CityRecipient: cityRecipientRef,

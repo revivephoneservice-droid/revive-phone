@@ -11,9 +11,9 @@ const supabase = createClient(
 export async function POST(req: Request) {
     const { items, total, contact, novaPoshta } = await req.json();
     
-    const merchantAccount = 'test_merch_n1'; 
+    const merchantAccount = 'revive_phone_ten_vercel_app'; 
     const merchantSecretKey = process.env.WAYFORPAY_SECRET_KEY!; 
-    const merchantDomainName = 'shamanproject.vercel.app';
+    const merchantDomainName = 'revive-phone-ten.vercel.app';
     const orderReference = `order_${Date.now()}`;
     const orderDate = Math.floor(Date.now() / 1000).toString();
     const amount = total.toString();

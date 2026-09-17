@@ -38,7 +38,7 @@ export async function GET() {
   }
 }
 */
-
+/*
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -69,3 +69,52 @@ export async function GET() {
 
   return NextResponse.json(branches);
 }
+  
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  const apiKey = process.env.NP_API_KEY;
+  
+  const fetchNP = async (model: string, method: string, props: any) => {
+    const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+      method: 'POST',
+      body: JSON.stringify({ apiKey, modelName: model, calledMethod: method, methodProperties: props })
+    });
+    return (await res.json()).data;
+  };
+
+  try {
+    // 1. Получаем профиль клиента
+    const senders = await fetchNP('Counterparty', 'getCounterparties', { CounterpartyProperty: 'Sender', Page: '1' });
+    const senderRef = senders[0]?.Ref;
+
+    // 2. Получаем контактное лицо
+    const contacts = await fetchNP('Counterparty', 'getCounterpartyContactPersons', { Ref: senderRef, Page: '1' });
+    const contactRef = contacts[0]?.Ref;
+
+    // 3. Ищем город Люботин
+    const cities = await fetchNP('Address', 'getCities', { FindByString: 'Люботин' });
+    const cityRef = cities[0]?.Ref;
+
+    // 4. Ищем отделение №2 в Люботине
+    let warehouseRef = 'Не найдено';
+    if (cityRef) {
+         const warehouses = await fetchNP('Address', 'getWarehouses', { CityRef: cityRef });
+         // Ищем именно второе отделение
+         const targetWarehouse = warehouses.find((w: any) => w.Number === '2');
+         if (targetWarehouse) warehouseRef = targetWarehouse.Ref;
+    }
+
+    return NextResponse.json({
+      "СКОПИРУЙ_ЭТО_В_ENV_LOCAL": {
+        NP_SENDER_REF: senderRef,
+        NP_CONTACT_SENDER_REF: contactRef,
+        NP_CITY_SENDER_REF: cityRef,
+        NP_SENDER_WAREHOUSE_REF: warehouseRef
+      }
+    });
+  } catch (error) {
+    return NextResponse.json({ error: 'Ошибка при запросе к НП' }, { status: 500 });
+  }
+}
+  */
