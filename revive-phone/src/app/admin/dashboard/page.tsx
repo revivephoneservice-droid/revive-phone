@@ -156,68 +156,175 @@ export default function AdminDashboard() {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <Card key={product.id} className="flex flex-col">
-            <CardHeader>
-              <div className="h-40 bg-gray-100 rounded-md mb-2 overflow-hidden flex items-center justify-center">
-                <img src={product.image_url || "/phone-pixel.png"} alt={product.name} className="w-full h-full object-cover" />
-              </div>
-              <CardTitle className="text-lg">{product.name}</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm space-y-1 flex-grow">
-              <p><strong>Категория:</strong> {UUID_TO_NAME[product.category_id] || "Неизвестно"}</p>
-              <p><strong>Бренд:</strong> {product.brand}</p>
-              <p><strong>Цена:</strong> {product.price} ₴</p>
-            </CardContent>
-            <CardFooter className="flex justify-between gap-2 pt-4">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="flex-1" onClick={() => setEditData(product)}>
-                    <Pencil className="h-4 w-4 mr-1" /> Ред.
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>Редактирование товара</DialogTitle>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <Input defaultValue={product.name} onChange={(e) => setEditData({...editData, name: e.target.value})} />
-                    <Input defaultValue={product.brand} onChange={(e) => setEditData({...editData, brand: e.target.value})} />
-                    <Input defaultValue={product.price} type="number" onChange={(e) => setEditData({...editData, price: e.target.value})} />
-                    <Textarea defaultValue={product.description} onChange={(e) => setEditData({...editData, description: e.target.value})} />
-                    <Input defaultValue={product.image_url} onChange={(e) => setEditData({...editData, image_url: e.target.value})} />
-                  </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Отмена</Button>
-                    </DialogClose>
-                    <Button onClick={handleUpdate}>Сохранить изменения</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+  {products.map((product) => (
+    <Card
+      key={product.id}
+      className="flex flex-col overflow-hidden"
+    >
+      <CardHeader className="p-5">
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" size="sm" className="flex-1">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
-                    <AlertDialogDescription>Товар будет удален навсегда.</AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Отмена</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleDelete(product.id)}>Удалить</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+        {/* Фото товара */}
+        <div className="h-[300px] w-full bg-zinc-900/40 rounded-xl mb-4 overflow-hidden flex items-center justify-center">
+          <img
+            src={product.image_url || "/phone-pixel.png"}
+            alt={product.name}
+            className="w-full h-full object-contain p-3"
+          />
+        </div>
+
+        <CardTitle className="text-xl leading-tight">
+          {product.name}
+        </CardTitle>
+      </CardHeader>
+
+      <CardContent className="text-sm space-y-2 flex-grow px-5">
+        <p>
+          <strong>Категория:</strong>{" "}
+          {UUID_TO_NAME[product.category_id] || "Неизвестно"}
+        </p>
+
+        <p>
+          <strong>Бренд:</strong> {product.brand}
+        </p>
+
+        <p className="text-base">
+          <strong>Цена:</strong>{" "}
+          {Number(product.price).toLocaleString("uk-UA")} ₴
+        </p>
+      </CardContent>
+
+      <CardFooter className="flex justify-between gap-3 p-5 pt-5">
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={() => setEditData(product)}
+            >
+              <Pencil className="h-4 w-4 mr-1" />
+              Ред.
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>
+                Редактирование товара
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="grid gap-4 py-4">
+              <Input
+                defaultValue={product.name}
+                onChange={(e) =>
+                  setEditData({
+                    ...editData,
+                    name: e.target.value,
+                  })
+                }
+              />
+
+              <Input
+                defaultValue={product.brand}
+                onChange={(e) =>
+                  setEditData({
+                    ...editData,
+                    brand: e.target.value,
+                  })
+                }
+              />
+
+              <Input
+                defaultValue={product.price}
+                type="number"
+                onChange={(e) =>
+                  setEditData({
+                    ...editData,
+                    price: e.target.value,
+                  })
+                }
+              />
+
+              <Textarea
+                defaultValue={product.description}
+                onChange={(e) =>
+                  setEditData({
+                    ...editData,
+                    description: e.target.value,
+                  })
+                }
+              />
+
+              <Input
+                defaultValue={product.image_url}
+                onChange={(e) =>
+                  setEditData({
+                    ...editData,
+                    image_url: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">
+                  Отмена
+                </Button>
+              </DialogClose>
+
+              <Button onClick={handleUpdate}>
+                Сохранить изменения
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="flex-1"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Вы уверены?
+              </AlertDialogTitle>
+
+              <AlertDialogDescription>
+                Товар будет удален навсегда.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>
+                Отмена
+              </AlertDialogCancel>
+
+              <AlertDialogAction
+                onClick={() =>
+                  handleDelete(product.id)
+                }
+              >
+                Удалить
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+      </CardFooter>
+    </Card>
+  ))}
+</div>
     </div>
   )
 }

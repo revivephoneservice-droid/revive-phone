@@ -2,17 +2,34 @@ export type Condition = "Новий" | "Як новий" | "Гарний"
 export type CategoryKey = "cases" | "protective_glasses" | "chargers" | "holders" | "smartphones"
 export type BrandKey = "Apple" | "Samsung" | "Google" | "Xiaomi"
 
-export type Accessory = {
-  id: number
+export interface Accessory {
+  id: string
+  category_id?: string | null
+
   name: string
-  description: string
-  category: string
-  categoryKey: CategoryKey
-  brand: BrandKey
-  compatibility: string
+  description?: string | null
+
   price: number
-  condition: Condition
-  image_url: string
+  stock_quantity?: number | null
+
+  image_url?: string | null
+  images?: string[] | null
+
+  is_active?: boolean
+  created_at?: string
+
+  brand?: string | null
+  sku?: number | string | null
+
+  specifications?: Record<
+    string,
+    string | number | boolean | null
+  > | null
+
+  warranty_months?: number | null
+  availability_status?: string | null
+
+  color?: string | null
 }
 
 // Добавьте этот объект прямо перед компонентом
