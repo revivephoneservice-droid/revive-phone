@@ -18,7 +18,7 @@ export function ProductCard({ product }: { product: Accessory }) {
         <span className="absolute left-3 top-3 z-10 rounded-full bg-background/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-foreground backdrop-blur">
           {product.brand}
         </span>
-        <button
+    { /*         <button
           aria-label={liked ? "Прибрати з обраного" : "Додати в обране"}
           aria-pressed={liked}
           onClick={() => setLiked((l) => !l)}
@@ -28,6 +28,7 @@ export function ProductCard({ product }: { product: Accessory }) {
             className={`size-4 transition-colors ${liked ? "fill-foreground" : ""}`}
           />
         </button>
+        */}
         <img
           src={product.image_url || "/placeholder.svg"}
           alt="images"
@@ -42,7 +43,7 @@ export function ProductCard({ product }: { product: Accessory }) {
         <h3 className="text-sm font-bold leading-snug text-foreground text-balance">
           {product.name}
         </h3>
-        <p className="mt-1 text-xs text-muted-foreground">
+        <p className="mt-1 text-xs text-muted-foreground line-clamp-2">
           {product.description}
         </p>
 
@@ -57,17 +58,7 @@ export function ProductCard({ product }: { product: Accessory }) {
             }}
             className="flex items-center gap-1.5 rounded-full border border-border px-3 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-foreground hover:text-background"
           >
-            {added ? (
-              <>
-                <Check className="size-3.5" />
-                Додано
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="size-3.5" />
-                Купити
-              </>
-            )}
+            Перейти
           </button>
         </div>
       </div>
